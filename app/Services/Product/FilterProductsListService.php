@@ -14,6 +14,10 @@ class FilterProductsListService
      */
     public function execute(FilterProductDto $filterProductDto): LengthAwarePaginator
     {
-        return Product::latest()->paginate($filterProductDto->perPage);
+        return Product::when(count($filterProductDto->onlyIds), function ($query) use ($filterProductDto) {
+            $query->whereIn('id', $filterProductDto->onlyIds);
+        })
+            ->latest()
+            ->paginate($filterProductDto->perPage);
     }
 }

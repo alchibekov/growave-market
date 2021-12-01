@@ -2,20 +2,39 @@
 
 namespace App\Services\Product;
 
-use App\Models\Product;
-use App\Services\Product\Exceptions\ProductAlreadyExistsInCart;
-
 class AddToCartService
 {
     /**
      * @param int $id
-     * @throws ProductAlreadyExistsInCart
+     * @return int
      */
-    public function execute(int $id): void
+    public function execute(int $id): int
     {
-        if (Product::find($id)->existsInCart()) {
-            throw new ProductAlreadyExistsInCart('Продукт уже добавлен в корзину');
+        $productsInCart = collect(session('cart.products'));
+
+        $product = $productsInCart->firstWhere('id', $id);
+
+        if (!$product) {
+            session()->push('cart.products', [
+                'count' => 1,
+                'id' => $id
+            ]);
+
+            return 1;
         }
-        session()->push('cart.products', $id);
+
+        $productsInCart = $productsInCart->map(function($product) use ($id) {
+            if ($product['id'] === $id) {
+                $product['count'] += 1;
+            }
+
+            return $product;
+        });
+
+        session(['cart.products' => $productsInCart]);
+
+        $product = $productsInCart->firstWhere('id', $id);
+
+        return $product['count'];
     }
 }

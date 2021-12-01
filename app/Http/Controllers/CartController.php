@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Cart\Exceptions\CartIsEmpty;
+use App\Services\Cart\GetCartService;
 use App\Services\Product\AddToCartService;
 use App\Services\Product\Dto\FilterProductDto;
 use App\Services\Product\Exceptions\ProductAlreadyExistsInCart;
@@ -19,42 +21,17 @@ class CartController extends Controller
     private FilterProductsListService $getProductsListService;
     private GetProductService $getProductService;
     private AddToCartService $addToCartService;
+    private $getCartService;
 
     /**
      * ProductController constructor.
-     * @param FilterProductsListService $getProductsListService
-     * @param GetProductService $getProductService
-     * @param AddToCartService $addToCartService
+     * @param GetCartService $getCartService
      */
     public function __construct(
-        FilterProductsListService $getProductsListService,
-        GetProductService $getProductService,
-        AddToCartService $addToCartService
+        GetCartService $getCartService
     )
     {
-        $this->getProductsListService = $getProductsListService;
-        $this->getProductService = $getProductService;
-        $this->addToCartService = $addToCartService;
-    }
-
-    /**
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function addToCart(Request $request): JsonResponse
-    {
-        try {
-            $this->addToCartService->execute($request->product);
-
-            return response()->json([
-                'status' => 'success'
-            ], JsonResponse::HTTP_OK);
-        } catch (ProductAlreadyExistsInCart $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
-        }
+        $this->getCartService = $getCartService;
     }
 
     /**
@@ -62,24 +39,18 @@ class CartController extends Controller
      */
     public function index(): View
     {
-        $products = $this->getProductsListService->execute(new FilterProductDto());
+        try {
+            $products = $this->getCartService->execute();
 
-        return view('products.index', [
-            'products' => $products,
-        ]);
-    }
+            return view('cart.index', [
+                'products' => $products,
+            ]);
+        } catch (CartIsEmpty $e) {
+            return view('cart.index', [
+                'products' => [],
+                'cartIsEmpty' => $e->getMessage(),
+            ]);
+        }
 
-    /**
-     * @param int $id
-     * @return Application|Factory|View
-     * @throws ProductNotExistsException
-     */
-    public function show(int $id): View
-    {
-        $product = $this->getProductService->execute($id);
-
-        return view('products.show', [
-            'product' => $product,
-        ]);
     }
 }

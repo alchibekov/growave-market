@@ -2,9 +2,18 @@
 
 @section('content')
     <div class="card mt-3">
-        <h5 class="card-header">Продукты</h5>
+        <div class="card-header">
+            <nav class="navbar navbar-light justify-content-between">
+                <h5 class="navbar-brand">Продукты</h5>
+                <a class="btn btn-sm btn-warning my-2 my-sm-0" href="{{ route('cart.index') }}"
+                   type="button">
+                    {!! \App\Enum\Icon::ARROW_NARROW_RIGHT() !!}
+                    {!! \App\Enum\Icon::CART() !!}
+                </a>
+            </nav>
+        </div>
         <div class="card-body">
-            <table class="table table-sm table-striped table-hover">
+            <table class="table table-sm table table-hover">
                 <thead>
                 <tr>
                     <th scope="col" class="col-md-1">#</th>
@@ -29,15 +38,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="card-footer">
-            {{ $products->links('pagination.default') }}
-        </div>
+        @if($products->hasPages())
+            <div class="card-footer">
+                {{ $products->links('pagination.default') }}
+            </div>
+        @endif
     </div>
-
 @endsection
-
-@push('scripts')
-    <script>
-        console.log('foo')
-    </script>
-@endpush
