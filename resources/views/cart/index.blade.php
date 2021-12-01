@@ -4,8 +4,8 @@
     <div class="card mt-3">
         <div class="card-header bg-info">
             <nav class="navbar justify-content-between">
-                <h5 class="navbar-brand">Корзина</h5>
-                <a class="btn btn-sm btn-warning my-2 my-sm-0" href="{{ url()->previous() }}"
+                <h5 class="navbar-brand"><strong>Корзина</strong></h5>
+                <a class="btn btn-sm btn-warning my-2 my-sm-0" href="{{ route('products.index') }}"
                    type="button">
                     {!! \App\Enum\Icon::ARROW_NARROW_LEFT() !!}
                 </a>

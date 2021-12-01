@@ -4,7 +4,7 @@
     <div class="card mt-3">
         <div class="card-header">
             <nav class="navbar navbar-light justify-content-between">
-                <h5 class="navbar-brand">Продукты</h5>
+                <h5 class="navbar-brand"><strong>Продукты</strong></h5>
                 <a class="btn btn-sm btn-warning my-2 my-sm-0" href="{{ route('cart.index') }}"
                    type="button">
                     {!! \App\Enum\Icon::ARROW_NARROW_RIGHT() !!}
