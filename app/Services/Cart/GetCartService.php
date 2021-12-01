@@ -51,8 +51,5 @@ class GetCartService
 
                 return $product;
             });
-
-
-//        return $this->filterProductListService->execute($filterProductDto);
     }
 }

@@ -57,7 +57,7 @@
 @push('scripts')
     <script>
         function addToCart(e) {
-            axios.get(e.dataset.action)
+            axios.put(e.dataset.action)
                 .then(response => {
                     e.hidden = true;
                     document.getElementById('go-to-cart-btn').hidden = false;
