@@ -1,8 +1,5 @@
 @extends('layouts.master')
 
-@section('header')
-
-@endsection
 @section('content')
     <div class="card mt-3">
         <h5 class="card-header">Продукты</h5>
@@ -18,7 +15,7 @@
                 </thead>
                 <tbody>
                 @forelse($products as $product)
-                    <tr>
+                    <tr onclick="window.location.href='{{ route('products.show', ['product' => $product]) }}'">
                         <th scope="row" class="col-md-1">{{ $product->id }}</th>
                         <th class="col-md-11">{{ $product->name }}</th>
                         <th class="col-md-0 text-center">{{ $product->price }}</th>
@@ -32,13 +29,15 @@
                 </tbody>
             </table>
         </div>
+        <div class="card-footer">
+            {{ $products->links('pagination.default') }}
+        </div>
     </div>
-
 
 @endsection
 
-@section('scripts')
+@push('scripts')
     <script>
         console.log('foo')
     </script>
-@endsection
+@endpush

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,4 +19,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('products', ProductController::class)->only('index');
+Route::get('products/{product}/add-to-cart/', [ProductController::class, 'addToCart'])
+    ->name('products.add-to-cart');
+Route::resource('products', ProductController::class)->only('index', 'show');
+Route::resource('cart', CartController::class)->only('index');
