@@ -48,7 +48,6 @@ class CartController extends Controller
         } catch (CartIsEmpty $e) {
             return view('cart.index', [
                 'products' => [],
-                'cartIsEmpty' => $e->getMessage(),
             ]);
         }
 
