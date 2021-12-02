@@ -64,7 +64,7 @@
                     </tr>
                 @empty
                     <tr class="no-data text-center">
-                        <td colspan="12">{{ $cartIsEmpty }}</td>
+                        <td colspan="12">В корзине нет продуктов</td>
                     </tr>
                 @endforelse
                 </tbody>
